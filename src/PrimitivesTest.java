@@ -31,7 +31,6 @@ class PrimitivesTest {
 			assertEquals(2, getSecondDigit(number));
 			assertEquals(1, getFirstDigit(number));
 	}
-
 		private Integer getFirstDigit(int number) {
 			number = number / 100;
 			int x = number % 10;
@@ -50,8 +49,8 @@ class PrimitivesTest {
 
 		@Test
 		void getBitValueTest() {
-			long number = 0x3ab7f5; // разбиваем на 16-чную систему 001110101011011111_1_10101, нумерация справа с 0
-			assertEquals(1, BitOperations.getBitValue(number, 5));
+			long number = 0x3ab7f5;
+			assertEquals(1, BitOperations.getBitValue(number, 5)); //слева ожидаемое значение, справа какой бит
 			assertEquals(0, BitOperations.getBitValue(number, 11));
 			assertEquals(0, BitOperations.getBitValue(number, 1));
 			assertEquals(1, BitOperations.getBitValue(number, 2));
@@ -60,18 +59,27 @@ class PrimitivesTest {
 
 		@Test
 		void setBitValueTest() {
-			long number = 0x3ab7f5;
-			assertEquals(0x3ab7e5, BitOperations.setBitValue(number, 5, false));
+			long number = 0x3ab7f5; // 0011 1010 1011 0111 11_1_1 0101
+			assertEquals(0x3ab7d5, BitOperations.setBitValue(number, 5, false)); //если 5й бит устанавливаем значение false = 0, и тогда получается число 0x3ab7d5
 			assertEquals(0x3ab7f5, BitOperations.setBitValue(number, 5, true));
 		}
+
 		
 		@Test
 		void revertBitValueTest() {
-			long number = 0x3ab7f5;
-			assertEquals(0x3ab7e5, BitOperations.revertBitValue(number, 5));
+			long number = 0x3ab7f5; //001110101011011111_1_10101
+			assertEquals(0x3ab7d5, BitOperations.revertBitValue(number, 5));//в 5м бите была 1, стал 0, получилось последняя буква d
 			assertEquals(0x3ab7f4, BitOperations.revertBitValue(number, 0));
+
 		}
-		
+
+		@Test
+		void NewTest() {
+			long number = -1;
+			assertEquals(1, BitOperations.getBitValue(number, 63));
+			number = BitOperations.revertBitValue(number, 63);
+			assertEquals(0, BitOperations.getBitValue(number, 63));
+		}	
 }
 
 
