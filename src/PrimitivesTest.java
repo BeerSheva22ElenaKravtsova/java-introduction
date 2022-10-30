@@ -6,18 +6,18 @@ import org.junit.jupiter.api.Test;
 class PrimitivesTest {
 
 	@Test
-	@Disabled // это делает тест неработающим - для проверки руководителем
+	@Disabled 
 	void dataTypeTest() {
 		int b = 10;
 		short a = 20;
-		var h = 20; // var принимает тип int, он определяется по значению, которое мы туда передали
-		char c = 'd'; // 
-		long l = (long) 10.1; //(long) - приведение к типу (обрезает его конец) - называется сделать кастинг
-		byte b1 = (byte) 1000; // max значение 127
-		a = (short) l; // здесь кастинг ничего не изменит, тк и там, и там могут храниться значения, доступные для обоих видов переменных
-		float f = 10.2f; // приведение к типу переменной f
-		int b2 = 0xfffffff1; // 0x значит что будет число в 16-чной системе, информация, которая содержится в этом числе, f = 1111 = 1 байт; ff = 11111111 = 2 байта; у каждого байта есть номер; int = 4 байта = 32 единицы информации (32 бита); итого здесь 4 байта х 2 = 32 байта; то есть это все единицы; х в числе означает что дальше будет ***; отрицательное число означает, что если к нему мы добавляем тоже самое число, только положительное, то будет = 0;
-		assertEquals(-15, b2); //assert - функция "предположить что значения переменных равны", JAVA делает преобразование, если типы разные, преобразует их в тип больший
+		var h = 20;
+		char c = 'd';
+		long l = (long) 10.1;
+		byte b1 = (byte) 1000;
+		a = (short) l;
+		float f = 10.2f;
+		int b2 = 0xfffffff1;
+		assertEquals(-15, b2);
 	}
 	
 		@Test
@@ -50,7 +50,7 @@ class PrimitivesTest {
 		@Test
 		void getBitValueTest() {
 			long number = 0x3ab7f5;
-			assertEquals(1, BitOperations.getBitValue(number, 5)); //слева ожидаемое значение, справа какой бит
+			assertEquals(1, BitOperations.getBitValue(number, 5));
 			assertEquals(0, BitOperations.getBitValue(number, 11));
 			assertEquals(0, BitOperations.getBitValue(number, 1));
 			assertEquals(1, BitOperations.getBitValue(number, 2));
@@ -60,7 +60,7 @@ class PrimitivesTest {
 		@Test
 		void setBitValueTest() {
 			long number = 0x3ab7f5; // 0011 1010 1011 0111 11_1_1 0101
-			assertEquals(0x3ab7d5, BitOperations.setBitValue(number, 5, false)); //если 5й бит устанавливаем значение false = 0, и тогда получается число 0x3ab7d5
+			assertEquals(0x3ab7d5, BitOperations.setBitValue(number, 5, false));
 			assertEquals(0x3ab7f5, BitOperations.setBitValue(number, 5, true));
 		}
 
@@ -68,7 +68,7 @@ class PrimitivesTest {
 		@Test
 		void revertBitValueTest() {
 			long number = 0x3ab7f5; //001110101011011111_1_10101
-			assertEquals(0x3ab7d5, BitOperations.revertBitValue(number, 5));//в 5м бите была 1, стал 0, получилось последняя буква d
+			assertEquals(0x3ab7d5, BitOperations.revertBitValue(number, 5));
 			assertEquals(0x3ab7f4, BitOperations.revertBitValue(number, 0));
 
 		}
