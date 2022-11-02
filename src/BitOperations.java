@@ -57,15 +57,9 @@ public class BitOperations {
 	 * @return new number in which nBit'h will be replaced (old value 0 new value 1)
 	 */
 	static public long revertBitValue(long number, int nBit) {
-		long res = -1;
-		if (checkNbit(nBit)) {
-			int value = getBitValue(number, nBit);
-			if (value == 0) {
-				res = number | getMask(nBit);
-			} else {
-				res = number & ~getMask(nBit);
-			}
-		}
+		long res = number ^ getMask(nBit);
 		return res;
 	}
+	 
+	
 }
