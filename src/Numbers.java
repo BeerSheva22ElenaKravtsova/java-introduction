@@ -18,6 +18,7 @@ public class Numbers {
 	 *         equals the sum of last 3 digits
 	 */
 	static public boolean isHappyNumber(int number) {
+		boolean mark = false;
 		if (getNDigits(number) == 6) {
 			int sum1 = 0;
 			int sum2 = 0;
@@ -31,9 +32,9 @@ public class Numbers {
 				}
 			}
 			if (sum1 == sum2) {
-				return true;
+				mark = true;
 			}
 		}
-		return false;
+		return mark;
 	}
 }
