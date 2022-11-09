@@ -57,15 +57,14 @@ public class BitOperations {
 	}
 
 //  at classroom:
-//	static public long invertBitValue(long number, int nBit) {
-//		long res = -1;
-//		if (checkNbit(nBit)) {
-//			long mask = getMask(nBit);
-//			res = number ^ mask;
-//		}
-//		return res;
-//	} 
-//	
+	static public long invertBitValue1(long number, int nBit) {
+		long res = -1;
+		if (checkNbit(nBit)) {
+			long mask = getMask(nBit);
+			res = number ^ mask;
+		}
+		return res;
+	}
 
 	// the function counts the number of insignificant zeros up to the first one
 	// (while - loop until the first 1 is encountered)

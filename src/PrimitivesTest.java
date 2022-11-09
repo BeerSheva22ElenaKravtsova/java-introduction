@@ -1,5 +1,7 @@
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.Arrays;
+
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -86,6 +88,7 @@ class PrimitivesTest {
 	}
 
 	@Test
+	@Disabled
 	void getNDigitsTest() {
 		assertEquals(6, Numbers.getNDigits(767676));
 		assertEquals(6, Numbers.getNDigits(-767676));
@@ -93,6 +96,7 @@ class PrimitivesTest {
 	}
 
 	@Test
+	@Disabled
 	void leadingZerosTest() {
 		assertEquals(58, BitOperations.leadingZeros(0x3a)); // 111010
 		assertEquals(34, BitOperations.leadingZeros(0x3afde567)); // 111010111111011110010101100111
@@ -102,6 +106,7 @@ class PrimitivesTest {
 	}
 
 	@Test
+	@Disabled
 	void onesInNumberTest() {
 		assertEquals(4, BitOperations.onesInNumber(0x3a)); // 111010
 		assertEquals(15, BitOperations.onesInNumber(0x3ab7d5)); // 1110101011011111010101
@@ -110,6 +115,7 @@ class PrimitivesTest {
 	}
 
 	@Test
+	@Disabled
 	void isHappyNumberTest() {
 		assertTrue(Numbers.isHappyNumber(123321));
 		assertTrue(Numbers.isHappyNumber(-123321));
@@ -120,10 +126,61 @@ class PrimitivesTest {
 		assertEquals(true, Numbers.isHappyNumber(123321));
 		assertEquals(false, Numbers.isHappyNumber(0));
 	}
+
+	@Test
+	@Disabled
+	void isHappyNumberTest1() {
+		int expectedTrue = 123321;
+		int expectedFalse = 123467;
+		assertEquals(true, Numbers.isHappyNumber1(expectedTrue));
+		assertEquals(false, Numbers.isHappyNumber1(expectedFalse));
+	}
+
+	@Test
+	@Disabled
+	void getDigitsTest() {
+		int expected[] = { 1, 2, 3, 4 };
+		assertArrayEquals(expected, Numbers.getDigits(1234));
+	}
+
+	@Test
+	void getNumberFromDigitsTest() {
+		int expectedNumber = 1234;
+		assertEquals(expectedNumber, Numbers.getNumberFromDigits(new int[] { 1, 2, 3, 4 }));
+	}
+
+	@Test
+	void verifyTest() {
+		assertTrue(IsraelIdentity.verify(123456782));
+		assertTrue(IsraelIdentity.verify(346826100));
+		assertFalse(IsraelIdentity.verify(123456783));
+	}
+
+	@Test
+	void generateRandomIdTest() {
+		assertTrue(IsraelIdentity.verify(IsraelIdentity.generateRandomId()));
+	}
+
+	@Test
+	void addsNumberTest() {
+		int expected[] = { 1, 2, 3, 4, 89 };
+		assertArrayEquals(expected, MyArrays.addsNumber(new int[] { 1, 2, 3, 4 }, 89));
+	}
+
+	@Test
+	void removeNumberTest() {
+		assertArrayEquals(new int[] { 1, 2, 4 }, MyArrays.removeNumber(new int[] { 1, 2, 3, 4 }, 2));
+		assertArrayEquals(new int[] { 1, 2, 3, 4 }, MyArrays.removeNumber(new int[] { 1, 2, 3, 4 }, -2));
+		assertArrayEquals(new int[] { 1, 2, 3, 4 }, MyArrays.removeNumber(new int[] { 1, 2, 3, 4 }, 8));
+	}
+
+	@Test
+	void insertSortedTest() {
+		assertArrayEquals(new int[] { 1, 2, 3, 3, 4 }, MyArrays.insertSorted(new int[] { 1, 2, 3, 4 }, 3));
+		assertArrayEquals(new int[] { 0, 1, 2, 3, 4 }, MyArrays.insertSorted(new int[] { 1, 2, 3, 4 }, 0));
+		assertArrayEquals(new int[] { -100, 1, 2, 3, 4 }, MyArrays.insertSorted(new int[] { 1, 2, 3, 4 }, -100));
+		assertArrayEquals(new int[] { 1, 2, 3, 4, 5 }, MyArrays.insertSorted(new int[] { 1, 2, 3, 4 }, 5));
+		assertArrayEquals(new int[] { 1, 2, 3, 4, 5 }, MyArrays.insertSorted(new int[] { 1, 2, 4, 5 }, 3));
+		assertArrayEquals(new int[] { 1, 2, 3, 4, 5 }, MyArrays.insertSorted(new int[] { 1, 2, 4, 5 }, 3));
+	}
 }
-
-
-
-
-
-
