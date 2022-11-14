@@ -20,38 +20,14 @@ public class Numbers {
 	 *         equals the sum of last 3 digits
 	 */
 	static public boolean isHappyNumber(int number) {
-		boolean mark = false;
-		if (getNDigits(number) == 6) {
-			int sum1 = 0;
-			int sum2 = 0;
-			for (int i = 0; i < 6; i++) {
-				int num = number % 10;
-				number /= 10;
-				if (i < 3) {
-					sum1 += num;
-				} else {
-					sum2 += num;
-				}
-			}
-			if (sum1 == sum2) {
-				mark = true;
-			}
-		}
-		return mark;
-	}
-
-//  at classroom:
-	static public boolean isHappyNumber1(int number) {
 		boolean res = false;
 		if (getNDigits(number) == N_HAPPY_NUMBERS_DIGITS) {
 			int halfDigits = N_HAPPY_NUMBERS_DIGITS / 2;
 			int numberPartDivider = (int) Math.pow(10, halfDigits);
 			int sumFirstPart = getSumDigits(number / numberPartDivider);
 			res = sumFirstPart == getSumDigits(number % numberPartDivider);
-
 		}
 		return res;
-
 	}
 
 	public static int getSumDigits(int number) {
@@ -61,7 +37,6 @@ public class Numbers {
 			number /= 10;
 		} while (number != 0);
 		return res;
-
 	}
 
 //there is a number, from it get an array of digits
@@ -86,7 +61,10 @@ public class Numbers {
 		}
 		return res;
 	}
-
+	
+	public static long getRandomNumber(long min, long max) {
+		return (long) (min - Math.random() * (max - min + 1));
+	}
 }
 	
 	
