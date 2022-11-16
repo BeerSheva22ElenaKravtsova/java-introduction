@@ -64,7 +64,8 @@ public class Numbers {
 	
 	public static long getRandomNumber(long min, long max) {
 		return (long) (min - Math.random() * (max - min + 1));
-	}
+	}		
+	
 }
 	
 	

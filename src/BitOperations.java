@@ -27,7 +27,7 @@ public class BitOperations {
 		return nBit < N_BITS && nBit > -1;
 	}
 
-	private static long getMask(int nBit) { // on the left is long, on the right of the assignment operator is an
+	static long getMask(int nBit) { // on the left is long, on the right of the assignment operator is an
 											// expression int, an operation is performed for int
 		return 1L << nBit; // all bits are 0 expect bit with number nBit
 	}

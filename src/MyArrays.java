@@ -1,5 +1,6 @@
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -63,9 +64,9 @@ public class MyArrays {
 	 * 
 	 * @param arraySorted
 	 * @param number
-	 * @return index value if number exists otherwise -1 O[N] - search number in unsorted array
+	 * @return index value if number exists otherwise -1 O[N] - search number in
+	 *         unsorted array
 	 */
-
 	public static int binarySearch(int arraySorted[], int number) {
 		int left = 0;
 		int right = arraySorted.length - 1;
@@ -84,108 +85,125 @@ public class MyArrays {
 	/**
 	 * @param arraySorted
 	 * @param number
-	 * @return the first index value, otherwise (no number in a given array) the method should return the same negative 
-	 * value as the Java standard Arrays.binarySearch does
+	 * @return the first index value, otherwise (no number in a given array) the
+	 *         method should return the same negative value as the Java standard
+	 *         Arrays.binarySearch does
 	 */
 	public static int binarySearchFirstIndex(int arraySorted[], int number) {
 		int left = 0;
 		int right = arraySorted.length - 1;
-		int middle = right / 2;
-		while (left <= right && !(number == arraySorted[middle] && (number > arraySorted[middle - 1] || middle == 0))) {
-			if (number < arraySorted[middle]) {
+		int middle = arraySorted.length / 2;
+		while (left <= right && arraySorted[left] != number) {
+			if (number <= arraySorted[middle]) {
 				right = middle - 1;
 			} else {
 				left = middle + 1;
 			}
 			middle = (left + right) / 2;
-
 		}
-		return left > right ? -middle-1 : middle;
-	}
-	
-	public static int[] bubbleSort(int array[]) {
-		if (array != null && isSortedArray(array) == false) {
-			for (int i = 0; i < array.length - 1; i++) {
-				moveGreaterRight(array, array.length - 1 - i);
-			}
-		}
-		return array;
+		return left < arraySorted.length && arraySorted[left] == number ? left : -left - 1;
 	}
 
-	private static boolean isSortedArray(int[] array) {
-		boolean res = true;
-		for (int i = 0; i < array.length - 1; i++) {
+	static public void bubbleSort(int[] array) {
+		int unsortedLength = array.length;
+		do {
+			unsortedLength = moveGreaterRight(array, unsortedLength - 1);
+		} while (unsortedLength != 0);
+	}
+
+	static private int moveGreaterRight(int[] array, int length) {
+		int res = 0;
+		for (int i = 0; i < length; i++) {
 			if (array[i] > array[i + 1]) {
-				res = false;
-				break;
+				res = i + 1;
+				swap(array, i, i + 1);
 			}
 		}
 		return res;
 	}
 
-	public static void moveGreaterRight(int[] array, int length) {
-		int temp;
-		for (int i = 0; i < length; i++) {
-			if (array[i] > array[i + 1]) {
-				temp = array[i + 1];
-				array[i + 1] = array[i];
-				array[i] = temp;
-			}
-		}
+	static private void swap(int[] array, int i, int j) {
+		int tmp = array[i];
+		array[i] = array[j];
+		array[j] = tmp;
 	}
 
 	/**
 	 * @param array - the array is unsorted
-	 * @return true if the array is unsorted but only one swap between two numbers is required for getting a sorted array
+	 * @return true if the array is unsorted but only one swap between two numbers
+	 *         is required for getting a sorted array
 	 */
-	public static boolean isOneSwapForSorted(int[] array) {
-		int counter = 0;
-		int firstDigit = 0;
-		int SecondDigit = 0;
-		int i = 1;
-		boolean res = false;
-		while (i < array.length && counter < 3) {
-			if (array[i - 1] > array[i]) {
-				counter++;
-				if (firstDigit == 0) {
-					firstDigit = i;
+	public static boolean isOneSwapForSorted(int array[]) {
+		int index1 = -1;
+		int index2 = -1;
+		int length = array.length - 1;
+		int equaledCount = 0;
+		boolean res = true;
+		int i = 0;
+		while (i < length && res) {
+			if (array[i] > array[i + 1]) {
+				if (index1 == -1) {
+					index1 = i - equaledCount;
+					if (equaledCount > 0) {
+						index2 = i + 1;
+					}
+				} else if (index2 != -1) {
+					res = false;
 				} else {
-					SecondDigit = i;
+					index2 = i + 1;
 				}
+			} else if (array[i] == array[i + 1]) {
+				equaledCount++;
+			} else if (array[i] < array[i + 1]) {
+				if (equaledCount != 0 && index1 != -1 && index2 == -1 && array[i] < array[index1]) {
+					index2 = i;
+				}
+				equaledCount = 0;
 			}
 			i++;
 		}
-		if (counter == 1) {
-			if ((firstDigit - 1 == 0) && (array[firstDigit - 1] <= array[firstDigit + 1])) {
-				res = true;
-			} else if ((firstDigit == array.length - 1) && (array[firstDigit] >= array[firstDigit - 2])) {
-				res = true;
-			} else if ((array[firstDigit - 1] <= array[firstDigit + 1])
-					&& (array[firstDigit] >= array[firstDigit - 2])) {
-				res = true;
+		return index1 != -1 && res ? checkIndexes(array, index1, index2) : false;
+
+	}
+
+	private static boolean checkIndexes(int[] array, int index1, int index2) {
+
+		return index2 == -1 ? checkOneIndex(array, index1) : checkTwoIndexes(array, index1, index2);
+	}
+
+	private static boolean checkTwoIndexes(int[] array, int index1, int index2) {
+
+		return (index2 == array.length - 1 || array[index1] <= array[index2 + 1]) && array[index2] <= array[index1 + 1]
+				&& (index1 == 0 || array[index2] >= array[index1 - 1]);
+
+	}
+
+	private static boolean checkOneIndex(int[] array, int index) {
+		return (index == array.length - 2 || array[index] <= array[index + 2])
+				&& (index == 0 || array[index + 1] >= array[index - 1]);
+	}
+
+	/**
+	 * 
+	 * @param array of short positive numbers
+	 * @param sum
+	 * @return true if array contains two numbers sum of which equals a given sum
+	 */
+
+	static public boolean isSum(short[] array, short sum) {
+		boolean res = false;
+		boolean[] arrayOfMarks = new boolean[sum + 1];
+		int i = 0;
+		while (i < array.length) {
+			if (sum - array[i] > 0) {
+				if (arrayOfMarks[sum - array[i]]) {
+					res = true;
+					break;
+				} else {
+					arrayOfMarks[array[i]] = true;
+				}
 			}
-		}
-		if (counter == 2) {
-			if ((firstDigit - 1 == 0) && (SecondDigit == array.length - 1)) {
-				if ((array[firstDigit - 1] >= array[SecondDigit - 1]) && (array[SecondDigit] <= array[firstDigit])) {
-					res = true;
-				}
-			} else if (firstDigit - 1 == 0) {
-				if ((array[firstDigit - 1] >= array[SecondDigit - 1])
-						&& (array[firstDigit - 1] <= array[SecondDigit + 1])
-						&& (array[SecondDigit] <= array[firstDigit])) {
-					res = true;
-				}
-			} else if (SecondDigit == array.length - 1) {
-				if ((array[firstDigit - 1] >= array[SecondDigit - 1]) && (array[SecondDigit] <= array[firstDigit])
-						&& (array[SecondDigit] >= array[firstDigit - 2])) {
-					res = true;
-				}
-			} else if ((array[firstDigit - 1] >= array[SecondDigit - 1])
-					&& (array[firstDigit - 1] <= array[SecondDigit + 1]) && (array[SecondDigit] <= array[firstDigit])
-					&& (array[SecondDigit] >= array[firstDigit - 2])) {
-				res = true;
-			}
+			i++;
 		}
 		return res;
 	}

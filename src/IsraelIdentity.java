@@ -1,5 +1,7 @@
 public class IsraelIdentity {
 
+	private static final int N_DIGITS_ID = 9;
+
 	/**
 	 * @param id
 	 * @return true if for right id otherwise false 9 digits control sum 
@@ -9,30 +11,71 @@ public class IsraelIdentity {
 	 * example, 123456782 => 1 + 4 (2*2) + 3 + 8 (4*2) + 5 + 3(6*2=12=>1+2) + 7 + 7 (8*2=16=>1+6) + 2 = 40 => true
 	 */
 	public static boolean verify(int id) {
-		int ar[] = Numbers.getDigits(id);
-		int digit;
-		int sum = 0;
-		for (int i = 0; i < ar.length; i++) {
-			if (i % 2 == 0) {
-				sum += ar[i];
-			} else {
-				digit = ar[i] * 2;
-				sum += digit <= 9 ? digit : (Numbers.getSumDigits(digit));
+		boolean res = false;
+		if (id > 0) {
+			int digits[] = Numbers.getDigits(id);
+			if (N_DIGITS_ID == digits.length) {
+				int controlSum = getControlSum(digits);
+				res = controlSum % 10 == 0;
 			}
 		}
-		return sum % 10 == 0;
+		return res;
 	}
+
+	private static int getControlSum(int[] digits) {	
+		return sumEvenIndexes(digits) + sumOddIndexes(digits);
+	}
+
+
+	private static int sumOddIndexes(int[] digits) {	
+	int res = 0;
+	for(int i = 1; i < digits.length; i +=2) {
+		int digit = digits[i] * 2;
+		if (digit > 9) {
+			digit -= 9;
+		}
+		res += digit;
+	}
+	return res;
+	}
+	
+	private static int sumEvenIndexes(int[] digits) {
+		int res = 0;
+		for(int i = 0; i < digits.length; i +=2) {
+			res += digits[i];
+		}
+		return res;
+		}
 
 	/**
 	 * @return random of 9 digits matching right Israel id cycle not more than 9
 	 *         iterations
 	 */
 	public static int generateRandomId() {
-		int randomInt = SportLotoAppl.getUniqueRandomInt(100000000, 999999999);
-		randomInt = (int)(randomInt / 10) * 10;
-		while (verify(randomInt) != true) {
-			randomInt++;
-		}
-		return randomInt;
+		int digits[] = new int[N_DIGITS_ID - 1];
+		fillRandomDigits(digits);
+		int controlSum = getControlSum(digits);
+		int lastDigit = getLastDigit(controlSum) ;
+		int res = Numbers.getNumberFromDigits(digits);
+		res = res * 10 + lastDigit;
+		return res;
 	}
+	
+		private static int getLastDigit(int controlSum) {
+			int rem = controlSum % 10;
+			int res = 0;
+			if(rem != 0) {
+				res = 10 - rem;
+			}
+			return res;
+			
+		}
+
+		private static void fillRandomDigits(int[] digits) {
+			digits[0] = (int) Numbers.getRandomNumber(1, 9);
+			for(int i = 1; i < digits.length; i++) {
+				digits[i] = (int) Numbers.getRandomNumber(0, 9);
+			}
+			
+		}
 }

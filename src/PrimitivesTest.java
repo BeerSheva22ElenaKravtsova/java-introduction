@@ -1,3 +1,4 @@
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Arrays;
@@ -192,14 +193,14 @@ class PrimitivesTest {
 	@Test
 	void binarySearchFirstIndexTest() {
 		assertEquals(3, MyArrays.binarySearchFirstIndex(new int[] { 1, 2, 3, 4, 4 }, 4));
-		assertEquals(-2, MyArrays.binarySearchFirstIndex(new int[] { 1, 2, 4, 5 }, 3));
-	}
-
-	@Test
-	void BubbleSortTest() {
-		assertArrayEquals(new int[] { 1, 2, 3, 4 }, MyArrays.bubbleSort(new int[] { 3, 1, 4, 2 }));
-		assertArrayEquals(new int[] { 1 }, MyArrays.bubbleSort(new int[] { 1 }));
-		assertArrayEquals(new int[] { -1, 0, 15, 20, 100 }, MyArrays.bubbleSort(new int[] { 15, -1, 20, 100, 0 }));
+		int ar[] = { 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 4, 20, 40 };
+		assertEquals(-14, MyArrays.binarySearchFirstIndex(ar, 3));
+		assertEquals(3, MyArrays.binarySearchFirstIndex(ar, 2));
+		assertEquals(-1, MyArrays.binarySearchFirstIndex(ar, 0));
+		assertEquals(13, MyArrays.binarySearchFirstIndex(ar, 4));
+		assertEquals(0, MyArrays.binarySearchFirstIndex(ar, 1));
+		assertEquals(-16, MyArrays.binarySearchFirstIndex(ar, 25));
+		assertEquals(-17, MyArrays.binarySearchFirstIndex(ar, 45));
 	}
 
 	@Test
@@ -230,6 +231,8 @@ class PrimitivesTest {
 		int ar5[] = { 1, 2, 3, 4, 10, 5 }; 
 		int ar6[] = { 2, 1, 3, 4, 5, 10 }; 
 		int ar7[] = { 3, 2, 1, 4, 5, 6 }; 
+		int ar8[] = { 1, 2, 2, 3, 3, 4, 4, 4, 3, 5};
+		int ar9[] = { 1, 2, 4, 3, 3, 3, 5 }; 
 		assertTrue(MyArrays.isOneSwapForSorted(ar1));
 		assertTrue(MyArrays.isOneSwapForSorted(ar2));
 		assertTrue(MyArrays.isOneSwapForSorted(ar3));
@@ -237,5 +240,25 @@ class PrimitivesTest {
 		assertTrue(MyArrays.isOneSwapForSorted(ar5));
 		assertTrue(MyArrays.isOneSwapForSorted(ar6));
 		assertTrue(MyArrays.isOneSwapForSorted(ar7));
+		assertTrue(MyArrays.isOneSwapForSorted(ar8));
+		assertTrue(MyArrays.isOneSwapForSorted(ar9));
+	}
+	
+	@Test
+	void isSumTest() {
+		short ar1[] = { 10, 2, 3, 4, 1 }; 
+		short ar2[] = { 1, 2, 4, 3, 5, 10 }; 
+		short ar3[] = { 0, 2, 3, 0, 5, 4 }; 
+		short ar4[] = { 1, 5, 3, 4, 2, 10 }; 
+		short ar5[] = { 0, 2, 3, 4, 10, 5 }; 
+		short ar6[] = { 2, 1, 3, 4, 5, 10 }; 
+		short ar7[] = { 3, 2, 1, 4, 5, 6 }; 
+		assertTrue(MyArrays.isSum(ar1, (short)3));
+		assertTrue(MyArrays.isSum(ar2, (short)11));
+		assertFalse(MyArrays.isSum(ar3, (short)0));
+		assertFalse(MyArrays.isSum(ar4, (short)100));
+		assertFalse(MyArrays.isSum(ar5, (short)0));
+		assertFalse(MyArrays.isSum(ar6, (short)2));
+		assertFalse(MyArrays.isSum(ar7, (short)12));
 	}
 }
