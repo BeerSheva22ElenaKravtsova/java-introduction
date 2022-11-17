@@ -253,12 +253,12 @@ class PrimitivesTest {
 		short ar5[] = { 0, 2, 3, 4, 10, 5 }; 
 		short ar6[] = { 2, 1, 3, 4, 5, 10 }; 
 		short ar7[] = { 3, 2, 1, 4, 5, 6 }; 
-		assertTrue(MyArrays.isSum(ar1, (short)3));
-		assertTrue(MyArrays.isSum(ar2, (short)11));
-		assertFalse(MyArrays.isSum(ar3, (short)0));
-		assertFalse(MyArrays.isSum(ar4, (short)100));
-		assertFalse(MyArrays.isSum(ar5, (short)0));
-		assertFalse(MyArrays.isSum(ar6, (short)2));
-		assertFalse(MyArrays.isSum(ar7, (short)12));
+		assertTrue(MyArrays.isSum2(ar1, (short)3));
+		assertTrue(MyArrays.isSum2(ar2, (short)11));
+		assertTrue(MyArrays.isSum2(ar3, (short)0));
+		assertFalse(MyArrays.isSum2(ar4, (short)100));
+		assertFalse(MyArrays.isSum2(ar5, (short)0));
+		assertFalse(MyArrays.isSum2(ar6, (short)2));
+		assertFalse(MyArrays.isSum2(ar7, (short)12));
 	}
 }
