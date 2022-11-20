@@ -189,14 +189,12 @@ public class MyArrays {
 	 * @param sum
 	 * @return true if array contains two numbers sum of which equals a given sum
 	 */
-	//оператор - есть на int и long
-	//cw
 	static public boolean isSum2(short[] array, short sum) {
 		boolean res = false;
-		boolean[] helper = new boolean[sum >= 0 ? + sum + 1 : 0x7fff + 1]; // 1 так как надо ставить индексацию, а индексы с 0, 0x7fff - это max значение short (тк short 2 байта)
+		boolean[] helper = new boolean[sum >= 0 ? + sum + 1 : 0x7fff + 1]; // 1 because it is necessary to make indexing, and indexes with 0, 0x7fff is the max value of short (short = 2 bytes)
 		int index = 0;
 		while (index < array.length && !res) { // !res = break
-			short diff = (short) (sum - array[index]); // тк у short нет отрицательных значений
+			short diff = (short) (sum - array[index]); // because short doesn't have negative values
 			if (diff >= 0) {
 				if (helper[diff]) {// == true
 					res = true;
@@ -205,28 +203,6 @@ public class MyArrays {
 				}
 			}
 			index++;
-		}
-		return res;
-	}
-	
-	
-	
-	
-	//hw
-	static public boolean isSum(short[] array, short sum) {
-		boolean res = false;
-		boolean[] arrayOfMarks = new boolean[sum + 1];
-		int i = 0;
-		while (i < array.length) {
-			if (sum - array[i] > 0) {
-				if (arrayOfMarks[sum - array[i]]) {
-					res = true;
-					break;
-				} else {
-					arrayOfMarks[array[i]] = true;
-				}
-			}
-			i++;
 		}
 		return res;
 	}
