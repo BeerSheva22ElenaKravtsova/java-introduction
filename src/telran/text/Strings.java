@@ -127,7 +127,42 @@ public class Strings {
 	 * @param names - sorted array - variable names sorted (a,b,c,d)
 	 * @return computed value of a given expression or Double.Nan (not a number)
 	 */
+	
+	//cw
 	public static Double computeArithmenticExpression(String expression, double values[], String names[]) {
+		Double res = Double.NaN;
+		names = updateNames(names);
+		values = getUpdatedValues(values, names);
+		if (isArithmeticExpression(expression) && checkBraces(expression)) {
+			expression = expression.replaceAll("[\\s()]+", "");
+			String operands[] = expression.split(operator());
+			String operators[] = expression.split(operand());
+			res = getOperandValue(operands[0], values, names);
+			int index = 1; // index 1 since operators with only 1 index
+			while (index < operands.length && !res.isNaN()) {
+				double operandValue = getOperandValue(operands[index], values, names);
+				res = computeOperation(res, operandValue, operators[index]);// add a new value to the previous result
+				index++;
+			}
+		}
+		return res;
+	}
+	
+	private static String[] updateNames(String[] names) {
+		return names == null ? new String[0] : names;
+	}
+
+	private static double[] getUpdatedValues(double[] values, String[] names) {
+		if (values == null) {
+			values = new double[0];
+		}
+		if(values.length != names.length) {
+			values = Arrays.copyOf(values, names.length);
+		}
+		return values;
+	}
+
+	public static Double computeArithmenticExpression1(String expression, double values[], String names[]) {
 		Double res = Double.NaN;
 		if (isArithmeticExpression(expression) && checkBraces(expression)) {
 			expression = expression.replaceAll("[\\s()]+", "");
@@ -170,7 +205,7 @@ public class Strings {
 	public static Double getOperandValue(String operand, double[] values, String[] names) {
 		Double value = Double.NaN;
 		if (operand.matches(numberExp())) {
-			value = Double.parseDouble(operand);
+			value = Double.valueOf(operand); 
 		} else {
 			int index = 0;
 			while (index < names.length && names[index] != operand) {
