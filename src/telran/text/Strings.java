@@ -89,10 +89,6 @@ public class Strings {
 		return "([a-zA-Z$][\\w$]*)|(_[\\w$]+)";
 	}
 
-	public static String numberExp() {
-		return "(\\d+\\.?\\d*|\\.\\d+)";
-	}
-
 	public static String ipV4Octet() {
 		return "([01]?\\d\\d?|2([0-4]\\d|5[0-5]))";
 	}
@@ -102,18 +98,20 @@ public class Strings {
 		return String.format("(%1$s\\.){3}%1$s", octetExp);
 	}
 
-	public static String arithmeticExpression() {
+	private static String arithmeticExpression() {
 		String operatorExp = operator();
 		String operandExp = operand();
-		return String.format("\\(*%1$s\\)*(%2$s\\(*%1$s\\)*)*", operandExp, operatorExp);
+		return String.format("%1$s(%2$s%1$s)*", operandExp, operatorExp);
 	}
 
-	public static String operand() {
-		return String.format("(%s|%s)", numberExp(), javaNameExp());
+	private static String operand() {
+		String numberExp = numberExp();
+		String variableExp = javaNameExp();
+		return String.format("(\\(*(%s|%s)\\)*)", numberExp, variableExp);
 	}
 
-	public static String operator() {
-		return "([-+*/])";
+	private static String numberExp() {
+		return "(\\d+\\.?\\d*|\\.\\d+)";
 	}
 
 	public static boolean isArithmeticExpression(String expression) {
@@ -121,62 +119,48 @@ public class Strings {
 		return expression.matches(arithmeticExpression());
 	}
 
+	private static String operator() {
+		return "([-+*/])";
+	}
+
 	/**
 	 * @param expession
 	 * @param values
-	 * @param names - sorted array - variable names sorted (a,b,c,d)
+	 * @param names     - sorted array - variable names sorted (a,b,c,d)
 	 * @return computed value of a given expression or Double.Nan (not a number)
 	 */
-	
-	//cw
 	public static Double computeArithmenticExpression(String expression, double values[], String names[]) {
 		Double res = Double.NaN;
-		names = updateNames(names);
+		names = getUpdatedNames(names);
 		values = getUpdatedValues(values, names);
 		if (isArithmeticExpression(expression) && checkBraces(expression)) {
 			expression = expression.replaceAll("[\\s()]+", "");
 			String operands[] = expression.split(operator());
 			String operators[] = expression.split(operand());
 			res = getOperandValue(operands[0], values, names);
-			int index = 1; // index 1 since operators with only 1 index
+			int index = 1;
 			while (index < operands.length && !res.isNaN()) {
 				double operandValue = getOperandValue(operands[index], values, names);
-				res = computeOperation(res, operandValue, operators[index]);// add a new value to the previous result
+				res = computeOperation(res, operandValue, operators[index]);
 				index++;
 			}
 		}
 		return res;
-	}
-	
-	private static String[] updateNames(String[] names) {
-		return names == null ? new String[0] : names;
 	}
 
 	private static double[] getUpdatedValues(double[] values, String[] names) {
 		if (values == null) {
 			values = new double[0];
 		}
-		if(values.length != names.length) {
+		if (values.length != names.length) {
 			values = Arrays.copyOf(values, names.length);
 		}
 		return values;
 	}
 
-	public static Double computeArithmenticExpression1(String expression, double values[], String names[]) {
-		Double res = Double.NaN;
-		if (isArithmeticExpression(expression) && checkBraces(expression)) {
-			expression = expression.replaceAll("[\\s()]+", "");
-			String operands[] = expression.split(operator());
-			String operators[] = expression.split(operand());
-			res = getOperandValue(operands[0], values, names);
-			int index = 1; // index 1 since operators with only 1 index
-			while (index < operands.length && !res.isNaN()) {
-				double operandValue = getOperandValue(operands[index], values, names);
-				res = computeOperation(res, operandValue, operators[index]);// add a new value to the previous result
-				index++;
-			}
-		}
-		return res;
+	private static String[] getUpdatedNames(String[] names) {
+
+		return names == null ? new String[0] : names;
 	}
 
 	private static Double computeOperation(Double operand1, double operand2, String operator) {
@@ -202,35 +186,34 @@ public class Strings {
 		return res;
 	}
 
-	public static Double getOperandValue(String operand, double[] values, String[] names) {
-		Double value = Double.NaN;
+	private static Double getOperandValue(String operand, double[] values, String[] names) {
+		Double res = Double.NaN;
+		int a;
 		if (operand.matches(numberExp())) {
-			value = Double.valueOf(operand); 
+			res = Double.valueOf(operand);
 		} else {
-			int index = 0;
-			while (index < names.length && names[index] != operand) {
-				if (names[index].compareTo(operand) == 0) {
-					value = values[index];
-				}
-				index++;
+			int index = Arrays.binarySearch(names, operand);
+			if (index > -1) {
+				res = values[index];
 			}
 		}
-		return value;
+		return res;
 	}
 
 	public static boolean checkBraces(String expression) {
-		int counter = 0;
-		int i = 0;
+		int count = 0;
+		int index = 0;
 		int length = expression.length();
-		while (i < length && counter >= 0) {
-			char valueOfIndex = expression.charAt(i);
-			if (valueOfIndex == '(') {
-				counter++;
-			} else if (valueOfIndex == ')') {
-				counter--;
+		while (index < length && count > -1) {
+			char symb = expression.charAt(index);
+			if (symb == '(') {
+				count++;
+			} else if (symb == ')') {
+				count--;
 			}
-			i++;
+			index++;
 		}
-		return counter == 0;
+		return count == 0;
 	}
+
 }
